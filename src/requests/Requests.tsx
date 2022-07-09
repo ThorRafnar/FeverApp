@@ -1,6 +1,7 @@
 import {BASE_URL} from "../constants/Theme";
 import CookieManager from "@react-native-cookies/cookies";
-import {LoginResponse} from "../interfaces";
+import {LoginResponse, Child, User, SickDay, Symptom, Diagnosis} from "../interfaces";
+import * as SecureStore from "expo-secure-store";
 
 export function LogInRequest(email:string, password:string):Promise<LoginResponse> {
   // FETCH
@@ -70,16 +71,96 @@ export function SignUpRequest(name:string, email:string, date:string, doctorIden
     })
 }
 
-export function GetUser():Promise<User> {
-
-}
-
-export function GetChild():Promise<Child> {
-
+export function GetUser():Promise<User|null> {
+  return SecureStore.getItemAsync('UserToken')
+    .then(token => {
+      return fetch(BASE_URL + 'user', {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'bearer '+ token,
+          'Content-Type': 'application/json'
+        }),
+      })
+        .then((res) => {
+          return res.json()
+            .then((json) => {
+              let child: Child|null = null;
+              if (json.Child !== null) {
+                child = new Child(
+                  String(json.Child.public_identifier),
+                  String(json.Child.Name),
+                  new Date(json.Child.date_of_birth),
+                  String(json.Child.Color));
+              }
+              return new User(
+                String(json.public_identifier),
+                String(json.name),
+                String(json.email),
+                new Date(json.date_of_birth),
+                String(json.profile_image_url),
+                child);
+            })
+            .catch(err => {
+              return null;
+            })
+        })
+        .catch(err => {
+          return null;
+        })
+    })
 }
 
 export function GetSickDays(start:Date, end:Date):Promise<SickDay[]> {
+  return SecureStore.getItemAsync('UserToken')
+    .then(token => {
+      return fetch(BASE_URL + 'user/sickday?from=' + start.toISOString() + '&to=' + end.toISOString(), {
+        method: 'GET',
+        headers: new Headers({
+          'Authorization': 'bearer '+ token,
+          'Content-Type': 'application/json'
+        }),
+      })
+        .then((res) => {
+          return res.json()
+            .then((json) => {
+              return json.map((obj: any) => {
 
+                let symptoms = obj.symptoms.map((s: any) => {
+                  return new Symptom(
+                    String(s.public_identifier),
+                    String(s.name),
+                    String(s.description),
+                    s.long_description ? String(s.long_description) : null,
+                    String(s.question)
+                  );
+                })
+                let diagnosis = new Diagnosis(
+                  String(obj.diagnosis.public_identifier),
+                  String(obj.diagnosis.name),
+                  String(obj.diagnosis.description),
+                  String(obj.diagnosis.long_description)
+                )
+                return new SickDay(
+                  obj.public_identifier,
+                  new Date(obj.sick_date),
+                  // BIG BRAIN VARIABLE NAMES... :/
+                  (obj.tempature),
+                  obj.doctors_diagnosis_bool,
+                  obj.other_diagnosis_bool,
+                  symptoms,
+                  diagnosis,
+                  obj.other_diagnosis_description ? obj.other_diagnosis_description : null
+                );
+              });
+            })
+            .catch(err => {
+              return [];
+            })
+        })
+        .catch(err => {
+          return [];
+        })
+    })
 }
 
 export function GetSymptoms():Promise<Symptom[]> {
