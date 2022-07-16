@@ -1,6 +1,6 @@
 import {BASE_URL} from "../constants/Theme";
 import CookieManager from "@react-native-cookies/cookies";
-import {LoginResponse, Child, User, SickDay, Symptom, Diagnosis} from "../interfaces";
+import {LoginResponse, Child, User, SickDay, Symptom, Diagnosis, SickDayInput} from "../interfaces";
 import * as SecureStore from "expo-secure-store";
 
 export function LogInRequest(email:string, password:string):Promise<LoginResponse> {
@@ -163,10 +163,103 @@ export function GetSickDays(start:Date, end:Date):Promise<SickDay[]> {
     })
 }
 
-export function GetSymptoms():Promise<Symptom[]> {
+function addSickDay(sickDay: SickDayInput):Promise<number> {
+  let s = {
+    'sick_date': sickDay.date.toISOString(),
+    'temperature_celcius': sickDay.temperature,
+    'doctors_diagnosis_bool': sickDay.doctors_diagnosis_bool,
+    'other_diagnosis_bool': sickDay.other_diagnosis_bool,
+    'other_diagnosis_description': sickDay.other_diagnosis_description,
+    'symptoms': sickDay.symptoms,
+    'diagnosis_public_identifier': sickDay.public_identifier
+  }
+  return SecureStore.getItemAsync('UserToken')
+    .then((token) => {
+      let obj = {
+        link: BASE_URL + 'user/sickday',
+        object: {
+          method: 'POST',
+          headers: new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }),
+          body: JSON.stringify(s)
+        }
+      }
+      console.log(obj);
+      return fetch(obj.link, obj.object)
+        .then((response) => {
+          return response.status;
+        })
+    })
+}
 
+export function GetSymptoms():Promise<Symptom[]> {
+  return SecureStore.getItemAsync('UserToken')
+    .then((token) => {
+      let obj = {
+        link: BASE_URL + 'symptom',
+        object: {
+          method: 'GET',
+          headers: new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          })
+        }
+      }
+      return fetch(obj.link, obj.object)
+        .then((response) => {
+          return response.json()
+            .then(json => {
+              const j = JSON.parse(json);
+              return j.map((item:any) => {
+                return new Symptom(item.public_identifier, item.name, item.description, item.long_description, item.question);
+              })
+            })
+            .catch(e => {
+              console.log('FUCK YOU PIECE OF SHIT')
+              return [];
+            })
+        })
+        .catch(e => {
+          console.log("err 1")
+          return [];
+        })
+    })
 }
 
 export function GetDiagnosis():Promise<Diagnosis[]> {
+  return SecureStore.getItemAsync('UserToken')
+    .then((token) => {
+      let obj = {
+        link: BASE_URL + 'diagnosis',
+        object: {
+          method: 'GET',
+          headers: new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          })
+        }
+      }
+      return fetch(obj.link, obj.object)
+        .then((response) => {
+          return response.json()
+            .then(json => {
+              const j = JSON.parse(json);
+              return j.map((x:any) => {
+                return new Diagnosis(x.public_identifier, x.name, x.description, x.long_description ? x.long_description : null);
+              });
+            })
+            .catch(e => {
+              return [];
+            })
+        })
+        .catch(e => {
 
+          return [];
+        })
+    })
 }

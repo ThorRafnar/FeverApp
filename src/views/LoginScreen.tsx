@@ -7,8 +7,6 @@ import {AuthContext} from '../components/Context';
 
 
 
-
-
 // @ts-ignore
 function LoginScreen({navigation}) {
   const [email, setEmail] = useState('');
@@ -30,6 +28,7 @@ function LoginScreen({navigation}) {
         placeholder={'Enter email address'}
         keyboardType={'email-address'}
         autoCapitalize={'none'}
+        autoCorrect={false}
         placeholderTextColor={PRIMARY_LIGHT}
         value={email}
       />
@@ -38,6 +37,7 @@ function LoginScreen({navigation}) {
         onChangeText={setPassword}
         placeholder={'Enter password'}
         placeholderTextColor={PRIMARY_LIGHT}
+        autoCorrect={false}
         secureTextEntry={true}
         value={password}
       />

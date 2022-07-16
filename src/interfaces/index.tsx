@@ -52,6 +52,28 @@ export class SickDay {
   }
 }
 
+export class SickDayInput {
+  public_identifier: string|null;
+  date: Date;
+  temperature: number;
+  doctors_diagnosis_bool: boolean;
+  other_diagnosis_bool: boolean;
+  symptoms: string[];
+  diagnosis_public_identifier: string;
+  other_diagnosis_description: string|null;
+
+  constructor(pid: string|null, date: Date, temp: number, ddb: boolean, odb: boolean, symptoms: string[], diagnosis: string, other_desc: string|null) {
+    this.public_identifier = pid;
+    this.date = date;
+    this.temperature = temp;
+    this.doctors_diagnosis_bool = ddb;
+    this.other_diagnosis_bool = ddb;
+    this.symptoms = symptoms;
+    this.diagnosis_public_identifier = diagnosis;
+    this.other_diagnosis_description = other_desc;
+  }
+}
+
 
 export class Symptom {
   public_identifier: string;

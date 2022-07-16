@@ -1,22 +1,37 @@
+import 'react-native-gesture-handler';
+
 import { StatusBar } from 'expo-status-bar';
 import {useEffect, useState, useMemo, useReducer} from "react";
 import {ActivityIndicator, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {Ionicons} from '@expo/vector-icons';
 import WelcomeScreen from "./src/views/WelcomeScreen";
 import LoginScreen from "./src/views/LoginScreen";
+import InfoScreen from "./src/views/InfoScreen";
 import SignupScreen from './src/views/Signup';
-import CreateChildScreen from './src/views/CreateChild';
 import HomeScreen from './src/views/Home';
-import CookieManager from "@react-native-cookies/cookies";
-import {BASE_URL, PRIMARY, TOAST_OFFSET} from "./src/constants/Theme";
+import {BACKGROUND, BASE_URL, MARGINS, PRIMARY, PRIMARY_DARK, PRIMARY_LIGHT, SECONDARY, TOAST_OFFSET} from "./src/constants/Theme";
 import {AuthContext} from './src/components/Context';
 import * as SecureStore from 'expo-secure-store';
 import {LogInRequest, SignUpRequest} from "./src/requests/Requests";
 import Toast from 'react-native-toast-message'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import {CustomDrawer} from './src/components/CustomDrawer';
+import {LogDay} from "./src/views/LogDay";
+import ProfileScreen from './src/views/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
+function Home() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='Home' component={HomeScreen}/>
+      <Stack.Screen name='Log Day' component={LogDay}/>
+    </Stack.Navigator>
+  )
+}
 
 function App() {
   const initialLoginState = {
@@ -185,25 +200,70 @@ function App() {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome">
-          { loginState.userToken !== ''
-            ?
-            (
-              <>
-                <Stack.Screen name='Home' component={HomeScreen}/>
-                <Stack.Screen name="CreateChild" component={CreateChildScreen}/>
-              </>
-            )
-            :
-            (
-              <>
-                <Stack.Screen name="Welcome" component={WelcomeScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Signup" component={SignupScreen} />
-              </>
-            )
-          }
-        </Stack.Navigator>
+        { loginState.userToken !== ''
+          ?
+          (
+            <Drawer.Navigator
+              drawerContent={props => <CustomDrawer {...props} />}
+              screenOptions={{
+                headerShown: false,
+                drawerActiveBackgroundColor: PRIMARY_LIGHT,
+                drawerActiveTintColor: BACKGROUND,
+                drawerInactiveTintColor: PRIMARY,
+                drawerLabelStyle: {
+                  marginLeft: -MARGINS,
+                  fontSize: 16
+                }
+              }}>
+              <Drawer.Screen
+                name="Home"
+                component={Home}
+                options={{
+                  drawerIcon: ({color, focused}) => (
+                    <Ionicons name={focused ? 'home' : 'home-outline'} size={22} color={color}/>
+                  )
+                }}
+              />
+              <Drawer.Screen
+                name="Information"
+                component={InfoScreen}
+                options={{
+                  drawerIcon: ({color, focused}) => (
+                    <Ionicons name={focused ? 'book' : 'book-outline'} size={22} color={color}/>
+                  )
+                }}
+              />
+              <Drawer.Screen
+                name="Profile"
+                component={ProfileScreen}
+                options={{
+                  drawerIcon: ({color, focused}) => (
+                    <Ionicons name={focused ? 'person' : 'person-outline'} size={22} color={color}/>
+                  )
+                }}
+              />
+              <Drawer.Screen
+                name="Settings"
+                component={HomeScreen}
+                options={{
+                  drawerIcon: ({color, focused}) => (
+                    <Ionicons name={focused ? 'settings' : 'settings-outline'} size={22} color={color}/>
+                  )
+                }}
+              />
+            </Drawer.Navigator>
+          )
+          :
+          (
+            <Stack.Navigator initialRouteName="Welcome" screenOptions={{
+              headerShown: false
+            }}>
+              <Stack.Screen name="Welcome" component={WelcomeScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Signup" component={SignupScreen} />
+            </Stack.Navigator>
+          )
+        }
       </NavigationContainer>
       <Toast
         position='top'

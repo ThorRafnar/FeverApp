@@ -81,6 +81,7 @@ function SignupScreen({navigation}) {
         placeholder={'Enter email address'}
         keyboardType={'email-address'}
         autoCapitalize={'none'}
+        autoCorrect={false}
         placeholderTextColor={PRIMARY_LIGHT}
         value={email}
       />
