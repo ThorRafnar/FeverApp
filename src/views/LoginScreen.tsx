@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {View, Text, SafeAreaView, TextInput, Pressable} from 'react-native';
 import styles from "./styles";
-import {PRIMARY_LIGHT} from "../constants/Theme";
+import {PRIMARY_DARK, PRIMARY_LIGHT} from "../constants/Theme";
 import CookieManager from "@react-native-cookies/cookies";
 import {AuthContext} from '../components/Context';
 
@@ -21,7 +21,7 @@ function LoginScreen({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={{flex: 1}}/>
-      <Text style={styles.welcomeText}>Welcome back!</Text>
+      <Text style={[styles.welcomeText, {color: PRIMARY_DARK}]}>Welcome back!</Text>
       <TextInput
         style={styles.input}
         onChangeText={setEmail}

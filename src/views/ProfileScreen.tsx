@@ -30,6 +30,8 @@ function ProfileScreen({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>{user.name}</Text>
+      <Text>{user.email}</Text>
+      {}
     </SafeAreaView>
   );
 }

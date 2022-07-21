@@ -67,7 +67,7 @@ export class SickDayInput {
     this.date = date;
     this.temperature = temp;
     this.doctors_diagnosis_bool = ddb;
-    this.other_diagnosis_bool = ddb;
+    this.other_diagnosis_bool = odb;
     this.symptoms = symptoms;
     this.diagnosis_public_identifier = diagnosis;
     this.other_diagnosis_description = other_desc;

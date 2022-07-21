@@ -15,9 +15,16 @@ export const CustomDrawer = (props:any, username: string) => {
       <DrawerContentScrollView
         {...props}
         contentContainerStyle={{backgroundColor: PRIMARY_VERY_LIGHT}}>
-        <View style={{height: MARGINS * 6, width: MARGINS * 6, borderRadius: MARGINS * 3, margin: MARGINS, backgroundColor: PRIMARY_LIGHT, alignItems: 'center', justifyContent: 'center'}}>
-          <Ionicons name={'person'} size={42}/>
-        </View>
+        <Pressable
+         onPress={() => {
+           props.navigation.navigate('Profile')
+         }}
+        >
+          <View style={{height: MARGINS * 6, width: MARGINS * 6, borderRadius: MARGINS * 3, margin: MARGINS, backgroundColor: PRIMARY_LIGHT, alignItems: 'center', justifyContent: 'center'}}>
+            <Ionicons name={'person'} size={42}/>
+          </View>
+        </Pressable>
+
         <View style={{flex: 1, backgroundColor: BACKGROUND, paddingVertical: MARGINS}}>
           <DrawerItemList {...props}/>
         </View>

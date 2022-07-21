@@ -149,7 +149,7 @@ export function GetSickDays(start:Date, end:Date):Promise<SickDay[]> {
                   obj.other_diagnosis_bool,
                   symptoms,
                   diagnosis,
-                  obj.other_diagnosis_description ? obj.other_diagnosis_description : null
+                  obj.other_diagnosis_description
                 );
               });
             })
@@ -163,7 +163,7 @@ export function GetSickDays(start:Date, end:Date):Promise<SickDay[]> {
     })
 }
 
-function addSickDay(sickDay: SickDayInput):Promise<number> {
+export function AddSickDay(sickDay: SickDayInput):Promise<any> {
   let s = {
     'sick_date': sickDay.date.toISOString(),
     'temperature_celcius': sickDay.temperature,
@@ -171,7 +171,7 @@ function addSickDay(sickDay: SickDayInput):Promise<number> {
     'other_diagnosis_bool': sickDay.other_diagnosis_bool,
     'other_diagnosis_description': sickDay.other_diagnosis_description,
     'symptoms': sickDay.symptoms,
-    'diagnosis_public_identifier': sickDay.public_identifier
+    'diagnosis_public_identifier': sickDay.diagnosis_public_identifier
   }
   return SecureStore.getItemAsync('UserToken')
     .then((token) => {
@@ -187,12 +187,66 @@ function addSickDay(sickDay: SickDayInput):Promise<number> {
           body: JSON.stringify(s)
         }
       }
-      console.log(obj);
+
+      return fetch(obj.link, obj.object)
+        .then((response) => {
+          return response;
+        })
+    })
+}
+
+export function EditSickDay(sickDay: SickDayInput):Promise<any> {
+  let s = {
+    'public_identifier': sickDay.public_identifier,
+    'temperature_celcius': sickDay.temperature,
+    'doctors_diagnosis_bool': sickDay.doctors_diagnosis_bool,
+    'other_diagnosis_bool': sickDay.other_diagnosis_bool,
+    'other_diagnosis_description': sickDay.other_diagnosis_description,
+    'symptoms': sickDay.symptoms,
+    'diagnosis_public_identifier': sickDay.diagnosis_public_identifier
+  }
+  return SecureStore.getItemAsync('UserToken')
+    .then((token) => {
+      let obj = {
+        link: BASE_URL + 'user/sickday',
+        object: {
+          method: 'PUT',
+          headers: new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }),
+          body: JSON.stringify(s)
+        }
+      }
       return fetch(obj.link, obj.object)
         .then((response) => {
           return response.status;
         })
     })
+}
+
+export function DeleteSickDay(pid: string):Promise<number> {
+  return SecureStore.getItemAsync('UserToken')
+    .then((token) => {
+      let obj = {
+        link: BASE_URL + 'user/sickday/' + pid,
+        object: {
+          method: 'DELETE',
+          headers: new Headers({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          }),
+        }
+      }
+
+      return fetch(obj.link, obj.object)
+        .then((response) => {
+          return response.status;
+        })
+    })
+
 }
 
 export function GetSymptoms():Promise<Symptom[]> {
@@ -229,6 +283,8 @@ export function GetSymptoms():Promise<Symptom[]> {
         })
     })
 }
+
+
 
 export function GetDiagnosis():Promise<Diagnosis[]> {
   return SecureStore.getItemAsync('UserToken')

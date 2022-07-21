@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-
 import { StatusBar } from 'expo-status-bar';
 import {useEffect, useState, useMemo, useReducer} from "react";
 import {ActivityIndicator, SafeAreaView, StyleSheet, Text, View} from 'react-native';
@@ -20,6 +19,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import {CustomDrawer} from './src/components/CustomDrawer';
 import {LogDay} from "./src/views/LogDay";
 import ProfileScreen from './src/views/ProfileScreen';
+import CreateChild from "./src/views/CreateChild";
+import {EditDay} from "./src/views/EditDay";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,6 +30,8 @@ function Home() {
     <Stack.Navigator>
       <Stack.Screen name='Home' component={HomeScreen}/>
       <Stack.Screen name='Log Day' component={LogDay}/>
+      <Stack.Screen name='Create Child' component={CreateChild} />
+      <Stack.Screen name='Edit Day' component={EditDay} />
     </Stack.Navigator>
   )
 }
@@ -196,6 +199,7 @@ function App() {
     )
   }
 
+
   // @ts-ignore
   return (
     <AuthContext.Provider value={authContext}>
@@ -204,7 +208,7 @@ function App() {
           ?
           (
             <Drawer.Navigator
-              drawerContent={props => <CustomDrawer {...props} />}
+              drawerContent={props => <CustomDrawer {...props}/>}
               screenOptions={{
                 headerShown: false,
                 drawerActiveBackgroundColor: PRIMARY_LIGHT,
@@ -216,7 +220,7 @@ function App() {
                 }
               }}>
               <Drawer.Screen
-                name="Home"
+                name="Home "
                 component={Home}
                 options={{
                   drawerIcon: ({color, focused}) => (
@@ -243,11 +247,11 @@ function App() {
                 }}
               />
               <Drawer.Screen
-                name="Settings"
+                name="Notification Settings"
                 component={HomeScreen}
                 options={{
                   drawerIcon: ({color, focused}) => (
-                    <Ionicons name={focused ? 'settings' : 'settings-outline'} size={22} color={color}/>
+                    <Ionicons name={focused ? 'notifications-circle' : 'notifications-circle-outline'} size={22} color={color}/>
                   )
                 }}
               />

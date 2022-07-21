@@ -33,18 +33,18 @@ function InfoScreen({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <ScrollView contentContainerStyle={{alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{color: PRIMARY_DARK, fontSize: 26, fontWeight: '500'}}>Common symptoms</Text>
+        <Text style={{color: PRIMARY_DARK, fontSize: 26, fontWeight: '500'}} key={'symptoms'}>Common symptoms</Text>
         {symptomList.map((x: Symptom, index: number) => {
           return (
-            <SymptomComponent name={x.name} description={x.long_description}/>
+            <SymptomComponent name={x.name} description={x.long_description} key={'symptom' + index}/>
           )
         }
         )}
-        <Text style={{color: PRIMARY_DARK, fontSize: 26, fontWeight: '500'}}>Common diagnoses</Text>
+        <Text style={{color: PRIMARY_DARK, fontSize: 26, fontWeight: '500'}} key={'diagnoses'}>Common diagnoses</Text>
         {diagnosisList.map((x: Diagnosis, index: number) => {
           if (x.name !== 'Other') {
             return (
-              <SymptomComponent name={x.name} description={x.description}/>
+              <SymptomComponent name={x.name} description={x.description} key={'diagnosis' + index}/>
             )
           }}
         )}

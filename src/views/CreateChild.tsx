@@ -133,7 +133,7 @@ function CreateChildScreen({navigation}) {
             const res = createChild(name, date, color)
               .then(res => {
                 if (res.status == 200) {
-                  navigation.navigate('Home');
+                  navigation.replace('Home');
                 } else {
                   alert('You have been logged out');
                   navigation.navigate('WelcomeScreen');

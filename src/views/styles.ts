@@ -7,11 +7,84 @@ import {
   PRIMARY_DARK,
   SECONDARY,
   TEXT,
-  WIDTH, HEIGHT, PRIMARY_VERY_LIGHT, CALENDAR_TOP_POSITION
+  WIDTH, HEIGHT, PRIMARY_VERY_LIGHT, CALENDAR_TOP_POSITION, PADDING, NEUTRAL, SECONDARY_LIGHT, TAG_WIDTH
 } from "../constants/Theme";
+import {BORDER_RADIUS} from "react-native-toast-message/lib/src/components/BaseToast.styles";
 
 
 export default StyleSheet.create({
+  tag: {
+    borderWidth: 1,
+    backgroundColor: PRIMARY_VERY_LIGHT,
+    borderColor: PRIMARY_DARK,
+    padding: 6,
+    margin: MARGINS / 2,
+    borderRadius: MARGINS,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
+  },
+  tagText: {
+    color: PRIMARY_DARK,
+    fontSize: 16,
+    fontWeight: '300'
+  },
+  emptyCircle: {
+    height: 24,
+    width: 24,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: PRIMARY
+  },
+  dotContainer: {
+    flexDirection: 'row',
+    marginVertical: MARGINS,
+    alignItems: 'center'
+  },
+  inactiveDot: {
+    height: 10,
+    width: 10,
+    marginHorizontal: 2,
+    borderRadius: 5,
+    backgroundColor: NEUTRAL
+  },
+  activeDot: {
+    height: 10,
+    width: 10,
+    marginHorizontal: 2,
+    borderRadius: 5,
+    backgroundColor: SECONDARY_LIGHT,
+    shadowColor: SECONDARY,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5
+
+  },
+  modalBar: {
+    top: 6,
+    position: 'absolute',
+    marginBottom: 4,
+    width: 135,
+    height: 5,
+    backgroundColor: TEXT,
+    borderRadius: 3,
+  },
+
+  sickdayModal: {
+    position: 'absolute',
+    bottom: -20,
+    backgroundColor: BACKGROUND,
+    justifyContent: 'center',
+    alignItems: 'center',
+    left: -18,
+    paddingVertical: 6,
+    width: WIDTH,
+    height: HEIGHT * 0.5,
+    borderRadius: BORDER_RADIUS * 2,
+  },
   input: {
     height: 32,
     margin: MARGINS,
@@ -26,8 +99,7 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   modal: {
-    height: 200,
-    width: WIDTH - MARGINS * 2,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },

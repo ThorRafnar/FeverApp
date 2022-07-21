@@ -1,18 +1,20 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, Pressable, SafeAreaView, TextInput} from 'react-native';
+import {View, Text, Pressable, SafeAreaView, TextInput, ScrollView} from 'react-native';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import styles from './styles';
 import Modal from 'react-native-modal';
-import {BACKGROUND, HEIGHT, MARGINS, PRIMARY, SECONDARY, SECONDARY_LIGHT, WIDTH} from "../constants/Theme";
+import {BACKGROUND, HEIGHT, MARGINS, PRIMARY, RED, SECONDARY, SECONDARY_LIGHT, WIDTH} from "../constants/Theme";
 import {Calendar, CalendarList} from 'react-native-calendars';
 import {Picker} from '@react-native-picker/picker';
 import CookieManager from '@react-native-cookies/cookies';
 import {AuthContext} from "../components/Context";
 import {User, Child, Symptom, Diagnosis, SickDay} from '../interfaces';
-import {GetSickDays, GetUser} from "../requests/Requests";
+import {DeleteSickDay, GetSickDays, GetUser} from "../requests/Requests";
+import {SickdayView} from "../components/sickdayView";
 import Toast from "react-native-toast-message";
 import {BORDER_RADIUS} from "react-native-toast-message/lib/src/components/BaseToast.styles";
 import {Tag} from "../components/Tag";
+import {useFocusEffect} from "@react-navigation/native";
 
 
 
@@ -28,6 +30,7 @@ function HomeScreen({navigation}) {
   const [diagnosisList, setDiagnosisList] = useState<Diagnosis[]>([]);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [currentSickDay, setCurrentSickDay] = useState<SickDay | null>(null);
+  const [reloads, setReloads] = useState<number>(0);
 
 
   const fever_dot = {startingDay: true, endingDay: true, color: PRIMARY}
@@ -50,28 +53,34 @@ function HomeScreen({navigation}) {
     GetUser()
       .then(u => {
         setUser(u);
+        if (u?.child == null) {
+          navigation.replace('Create Child');
+        }
         setChild(u !== null ? u.child : null);
       });
     GetSickDays(new Date('2000-01-01'),  new Date('2100-01-01'))
       .then(d => {
-        console.log('HII');
         setDateList(d);
         let m:any = {};
         d.map((day, index) => {
           let dayStyle;
-          if (day.temperature < 37.9) {
+          if (day.temperature > 37.9) {
             dayStyle = {periods: [fever_dot]}
-            console.log(toShortString(day.date));
           } else {
             dayStyle = {periods: []}
           }
-          console.log(dayStyle)
           m[toShortString(day.date)] = dayStyle;
         })
         m[toShortString(date)] = {...m[toShortString(date)], ...selected}
         setMarkedDates(m);
+        let x = d.find((x) => {
+          return toShortString(x.date) === toShortString(date);
+        });
+        if (x !== undefined) {
+          setCurrentSickDay(x);
+        }
       })
-  },[]);
+  },[reloads]);
 
   useEffect(() => {
     let m = markedDates;
@@ -81,6 +90,7 @@ function HomeScreen({navigation}) {
       return toShortString(d.date) === toShortString(date);
     });
     setCurrentSickDay(x ? x : null);
+
   }, [date])
 
   const toggleModal = () => {
@@ -95,50 +105,20 @@ function HomeScreen({navigation}) {
     setMarkedDates(m);
     setDate(new Date(day));
   }
+
+  const makeReload = () => {
+    setReloads(reloads + 1);
+  }
   // @ts-ignore
   // @ts-ignore
   return (
     <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <View style={{flex: 1}}/>
-      <Modal
-        isVisible={modalVisible}
-        onBackdropPress={() => toggleModal()}
-        onSwipeComplete={() => toggleModal()}
-        swipeDirection={['left', 'right', 'up', 'down']}
-        useNativeDriver={true}
-      >
-        <View style={{ alignSelf: 'center', backgroundColor: BACKGROUND, height: HEIGHT * 0.5, width: WIDTH * 0.7, borderRadius: BORDER_RADIUS, alignItems: 'center', justifyContent: 'center', padding: MARGINS }}>
-          <Text>{date.toDateString()}</Text>
-          <View style={{flex: 1}}/>
-          {
-            currentSickDay === null
-            ?
-            <Text>Normal day</Text>
-            :
-            (
-              <>
-                <Text style={styles.questionText}>{currentSickDay.temperature}°C</Text>
-                {currentSickDay.symptoms.map((symptom, index) => {
-                  return (
-                    <Tag name={symptom.name}/>
-                  )
-                })}
-                <Text style={styles.subText}>Diagnosis: {currentSickDay.diagnosis.name}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                  <Ionicons name={currentSickDay.doctors_diagnosis_bool ? 'checkmark-circle' : 'checkmark-circle-outline'} size={22}/>
-                  <Text style={styles.subText}>{currentSickDay.doctors_diagnosis_bool ? 'Diagnosed by a doctor' : 'Not diagnosed by a doctor'}</Text>
-                </View>
 
-              </>
-            )
-          }
-          <View style={{flex: 1}}/>
 
-          <Pressable onPress={() => toggleModal()} >
-            <Text style={styles.subText}>Close</Text>
-          </Pressable>
-        </View>
-      </Modal>
+
+
+
       <View style={styles.calendarContainer}>
         <Calendar
           initialDate={toShortString(date)}
@@ -150,7 +130,7 @@ function HomeScreen({navigation}) {
           // Handler which gets executed on day long press. Default = undefined
           onDayLongPress={day => {
             updateDate(new Date(day.dateString));
-            toggleModal();
+            navigation.navigate('Edit Day', {sickday: currentSickDay, date: new Date(day.dateString), makeReload: makeReload})
           }}
           // Enable the option to swipe between months. Default = false
           enableSwipeMonths={true}
@@ -163,12 +143,9 @@ function HomeScreen({navigation}) {
         onPress={() => {
           dateLogged(date)
           ?
-          navigation.navigate('Log Day', {date: toShortString(date)})
+          navigation.navigate('Log Day', {date: toShortString(date), makeReload: makeReload})
           :
-            Toast.show({
-              type: 'info',
-              text1: 'You are trying to edit a day'
-            });
+          navigation.navigate('Edit Day', {sickday: currentSickDay, date: date, makeReload: makeReload})
         }}
         style={[styles.buttonFilled, styles.circleButton]}
       >

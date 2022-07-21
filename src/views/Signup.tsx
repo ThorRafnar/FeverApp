@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, Modal, Pressable, SafeAreaView, Text, TextInput, View} from 'react-native';
 import styles from "./styles";
-import {PRIMARY_LIGHT, TEXT} from "../constants/Theme";
+import {PRIMARY_DARK, PRIMARY_LIGHT, TEXT} from "../constants/Theme";
 import DatePicker from 'react-native-date-picker';
 import CookieManager from '@react-native-cookies/cookies';
 import {AuthContext} from "../components/Context";
@@ -66,7 +66,7 @@ function SignupScreen({navigation}) {
   return (
     <SafeAreaView style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <View style={{flex: 1}}/>
-      <Text style={styles.welcomeText}>Create an Account</Text>
+      <Text style={[styles.welcomeText, {color: PRIMARY_DARK}]}>Create an Account</Text>
       <TextInput
         style={styles.input}
         onChangeText={onChangeName}

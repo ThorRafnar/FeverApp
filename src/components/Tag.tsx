@@ -1,13 +1,13 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, Pressable} from 'react-native';
 import styles from "./styles";
+import {PRIMARY_DARK} from "../constants/Theme";
+import {Ionicons} from "@expo/vector-icons";
 
 // @ts-ignore
 export function Tag(props) {
+  const {symptom, onDelete} = props;
   return (
-    <View style={styles.tag}>
-      <Text style={styles.tagText}>{props.name}</Text>
-      <View style={styles.tagCircle}/>
-    </View>
+
   )
 }
