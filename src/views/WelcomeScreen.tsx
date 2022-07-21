@@ -3,13 +3,13 @@ import {View, Text, Pressable, SafeAreaView} from 'react-native';
 import styles from './styles';
 import Svg, { Path } from "react-native-svg";
 import {StatusBar} from "expo-status-bar";
-import {PRIMARY, WIDTH, PRIMARY_LIGHT, PRIMARY_VERY_LIGHT, HEIGHT} from "../constants/Theme";
+import {PRIMARY, WIDTH, PRIMARY_LIGHT, PRIMARY_VERY_LIGHT, HEIGHT, BACKGROUND} from "../constants/Theme";
 
 
 // @ts-ignore
 function WelcomeScreen({ navigation }) {
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: BACKGROUND}}>
       <View style={{backgroundColor: PRIMARY, height: 70, width: WIDTH}}/>
       <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View style={{flex: 0.5, width: WIDTH, backgroundColor: PRIMARY, alignItems: 'center', justifyContent: 'center'}}>

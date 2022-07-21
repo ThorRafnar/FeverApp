@@ -7,7 +7,15 @@ import {
   PRIMARY_DARK,
   SECONDARY,
   TEXT,
-  WIDTH, HEIGHT, PRIMARY_VERY_LIGHT, CALENDAR_TOP_POSITION, PADDING, NEUTRAL, SECONDARY_LIGHT, TAG_WIDTH
+  WIDTH,
+  HEIGHT,
+  PRIMARY_VERY_LIGHT,
+  CALENDAR_TOP_POSITION,
+  PADDING,
+  NEUTRAL,
+  SECONDARY_LIGHT,
+  TAG_WIDTH,
+  BACKGROUND_LIGHT
 } from "../constants/Theme";
 import {BORDER_RADIUS} from "react-native-toast-message/lib/src/components/BaseToast.styles";
 
@@ -28,6 +36,16 @@ export default StyleSheet.create({
     color: PRIMARY_DARK,
     fontSize: 16,
     fontWeight: '300'
+  },
+  addButton: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    borderColor: PRIMARY_DARK,
+    borderWidth: 1,
+    backgroundColor: PRIMARY_VERY_LIGHT,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   emptyCircle: {
     height: 24,
@@ -76,7 +94,7 @@ export default StyleSheet.create({
   sickdayModal: {
     position: 'absolute',
     bottom: -20,
-    backgroundColor: BACKGROUND,
+    backgroundColor: BACKGROUND_LIGHT,
     justifyContent: 'center',
     alignItems: 'center',
     left: -18,
@@ -92,6 +110,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: PRIMARY,
     padding: 10,
+    color: TEXT
   },
   colorSample: {
     height: 16,
@@ -123,7 +142,6 @@ export default StyleSheet.create({
     borderRadius: MARGINS
   },
   calendar: {
-
   },
   halfButton: {
     margin: MARGINS,

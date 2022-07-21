@@ -4,14 +4,14 @@ import {Ionicons, MaterialIcons} from '@expo/vector-icons';
 import styles from './styles';
 import Modal from 'react-native-modal';
 import {
-  BACKGROUND,
+  BACKGROUND, BACKGROUND_LIGHT,
   HEIGHT,
-  MARGINS,
+  MARGINS, NEUTRAL,
   PADDING,
   PRIMARY,
   PRIMARY_LIGHT, PRIMARY_VERY_LIGHT,
   SECONDARY,
-  SECONDARY_LIGHT,
+  SECONDARY_LIGHT, TEXT,
   WIDTH
 } from "../constants/Theme";
 import {Calendar, CalendarList} from 'react-native-calendars';
@@ -128,7 +128,7 @@ export function LogDay({route, navigation}) {
           }
         }}>
         {diagnosisList.map(d => {
-          return <Picker.Item label={d.name} value={d.public_identifier} key={d.public_identifier}/>
+          return <Picker.Item color={TEXT} label={d.name} value={d.public_identifier} key={d.public_identifier}/>
         })}
       </Picker>
     )
@@ -137,110 +137,114 @@ export function LogDay({route, navigation}) {
   // If we are selecting temperature
   if (currentScreen === 0) {
     return (
-      <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
-        <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
-          <Text style={styles.questionText}>What was {child ? child.name + '\'s' : 'the' } temperature {date === new Date().toISOString().split('T')[0] ? 'today' : 'on ' + new Date(date).toDateString()}?</Text>
-          <View style={{flex: 1}}/>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: WIDTH * 0.6}}>
-            <Picker
-              style={{flex: 1.5}}
-              selectedValue={temperature}
-              onValueChange={(itemValue, itemIndex) =>
-                setTemperature(itemValue)
-              }>
-              <Picker.Item label='30' value={30} />
-              <Picker.Item label='31' value={31} />
-              <Picker.Item label='32' value={32} />
-              <Picker.Item label='33' value={33} />
-              <Picker.Item label='34' value={34} />
-              <Picker.Item label='35' value={35} />
-              <Picker.Item label='36' value={36} />
-              <Picker.Item label='37' value={37} />
-              <Picker.Item label='38' value={38} />
-              <Picker.Item label='39' value={39} />
-              <Picker.Item label='40' value={40} />
-              <Picker.Item label='41' value={41} />
-              <Picker.Item label='42' value={42} />
-              <Picker.Item label='43' value={43} />
-              <Picker.Item label='44' value={44} />
-              <Picker.Item label='45' value={45} />
-            </Picker>
-            <Text style={styles.questionText}>,</Text>
-            <Picker
-              style={{flex: 1}}
-              selectedValue={tempDecimal}
-              onValueChange={(itemValue, itemIndex) =>
-                setTempDecimal(itemValue)
-              }>
-              <Picker.Item label='0' value={0} />
-              <Picker.Item label='1' value={1} />
-              <Picker.Item label='2' value={2} />
-              <Picker.Item label='3' value={3} />
-              <Picker.Item label='4' value={4} />
-              <Picker.Item label='5' value={5} />
-              <Picker.Item label='6' value={6} />
-              <Picker.Item label='7' value={7} />
-              <Picker.Item label='8' value={8} />
-              <Picker.Item label='9' value={9} />
-            </Picker>
-            <Text style={styles.questionText}>°C</Text>
+      <View style={{flex: 1, backgroundColor: BACKGROUND_LIGHT}}>
+        <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
+          <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
+            <Text style={styles.questionText}>What was {child ? child.name + '\'s' : 'the' } temperature {date === new Date().toISOString().split('T')[0] ? 'today' : 'on ' + new Date(date).toDateString()}?</Text>
+            <View style={{flex: 1}}/>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: WIDTH * 0.6}}>
+              <Picker
+                style={{flex: 1.5}}
+                selectedValue={temperature}
+                onValueChange={(itemValue, itemIndex) =>
+                  setTemperature(itemValue)
+                }>
+                <Picker.Item color={TEXT} label='30' value={30} />
+                <Picker.Item color={TEXT} label='31' value={31} />
+                <Picker.Item color={TEXT} label='32' value={32} />
+                <Picker.Item color={TEXT} label='33' value={33} />
+                <Picker.Item color={TEXT} label='34' value={34} />
+                <Picker.Item color={TEXT} label='35' value={35} />
+                <Picker.Item color={TEXT} label='36' value={36} />
+                <Picker.Item color={TEXT} label='37' value={37} />
+                <Picker.Item color={TEXT} label='38' value={38} />
+                <Picker.Item color={TEXT} label='39' value={39} />
+                <Picker.Item color={TEXT} label='40' value={40} />
+                <Picker.Item color={TEXT} label='41' value={41} />
+                <Picker.Item color={TEXT} label='42' value={42} />
+                <Picker.Item color={TEXT} label='43' value={43} />
+                <Picker.Item color={TEXT} label='44' value={44} />
+                <Picker.Item color={TEXT} label='45' value={45} />
+              </Picker>
+              <Text style={styles.questionText}>,</Text>
+              <Picker
+                style={{flex: 1}}
+                selectedValue={tempDecimal}
+                onValueChange={(itemValue, itemIndex) =>
+                  setTempDecimal(itemValue)
+                }>
+                <Picker.Item color={TEXT} label='0' value={0} />
+                <Picker.Item color={TEXT} label='1' value={1} />
+                <Picker.Item color={TEXT} label='2' value={2} />
+                <Picker.Item color={TEXT} label='3' value={3} />
+                <Picker.Item color={TEXT} label='4' value={4} />
+                <Picker.Item color={TEXT} label='5' value={5} />
+                <Picker.Item color={TEXT} label='6' value={6} />
+                <Picker.Item color={TEXT} label='7' value={7} />
+                <Picker.Item color={TEXT} label='8' value={8} />
+                <Picker.Item color={TEXT} label='9' value={9} />
+              </Picker>
+              <Text style={styles.questionText}>°C</Text>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <Pressable
+                onPress={() => navigation.goBack()}
+                style={[styles.buttonEmpty, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextEmpty}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setCurrentScreen(currentScreen + 1)}
+                style={[styles.buttonFilled, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextFilled}>Confirm</Text>
+              </Pressable>
+            </View>
+
+            {activityDots()}
+
           </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <Pressable
-              onPress={() => navigation.goBack()}
-              style={[styles.buttonEmpty, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextEmpty}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setCurrentScreen(currentScreen + 1)}
-              style={[styles.buttonFilled, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextFilled}>Confirm</Text>
-            </Pressable>
-          </View>
-
-          {activityDots()}
-
         </View>
       </View>
     )
   // If we are selecting symptom
   } else if (currentScreen <= symptomList.length) {
     return (
-      <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
-        <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
-          <Text style={styles.questionText}>{symptomList[currentScreen - 1].question}</Text>
-          <View style={{flex: 1}}/>
-          <View style={{flexDirection: 'row'}}>
-            <Pressable
-              onPress={() => {
-                let newSymptoms = selectedSymptoms;
-                newSymptoms = removeItemAll(newSymptoms, symptomList[currentScreen - 1]);
-                setSelectedSymptoms(newSymptoms);
-                setCurrentScreen(currentScreen + 1);
-              }}
-              style={[styles.buttonEmpty, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextEmpty}>No</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                let newSymptoms = selectedSymptoms;
-                newSymptoms.push(symptomList[currentScreen - 1]);
-                setSelectedSymptoms(newSymptoms);
-                setCurrentScreen(currentScreen + 1);
+      <View style={{flex: 1, backgroundColor: BACKGROUND_LIGHT}}>
+        <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
+          <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
+            <Text style={styles.questionText}>{symptomList[currentScreen - 1].question}</Text>
+            <View style={{flex: 1}}/>
+            <View style={{flexDirection: 'row'}}>
+              <Pressable
+                onPress={() => {
+                  let newSymptoms = selectedSymptoms;
+                  newSymptoms = removeItemAll(newSymptoms, symptomList[currentScreen - 1]);
+                  setSelectedSymptoms(newSymptoms);
+                  setCurrentScreen(currentScreen + 1);
+                }}
+                style={[styles.buttonEmpty, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextEmpty}>No</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  let newSymptoms = selectedSymptoms;
+                  newSymptoms.push(symptomList[currentScreen - 1]);
+                  setSelectedSymptoms(newSymptoms);
+                  setCurrentScreen(currentScreen + 1);
 
-              }}
-              style={[styles.buttonFilled, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextFilled}>Yes</Text>
-            </Pressable>
+                }}
+                style={[styles.buttonFilled, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextFilled}>Yes</Text>
+              </Pressable>
+            </View>
+
+            {activityDots()}
+
           </View>
-
-          {activityDots()}
-
         </View>
       </View>
     )
@@ -248,59 +252,61 @@ export function LogDay({route, navigation}) {
   } else if (currentScreen === screenCount - 2){
     console.log(isOther(diagnosis));
     return (
-      <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
-        <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
-          <Text style={styles.questionText}>Select a diagnosis</Text>
+      <View style={{flex: 1, backgroundColor: BACKGROUND_LIGHT}}>
+        <View style={[{ alignSelf: 'center', height: HEIGHT * 0.6}, styles.calendarContainer]}>
+          <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
+            <Text style={styles.questionText}>Select a diagnosis</Text>
 
-          {diagnosisPickerList()}
+            {diagnosisPickerList()}
 
-          <TextInput
-            style={[styles.input, {width: WIDTH - PADDING * 4}]}
-            onChangeText={setOtherDiagnosis}
-            editable={isOther(diagnosis)}
-            placeholder={isOther(diagnosis) ? 'Describe the diagnosis' : ''}
-            placeholderTextColor={isOther(diagnosis) ? PRIMARY_LIGHT : PRIMARY_VERY_LIGHT}
-            autoCapitalize={'sentences'}
-            value={otherDiagnosis}
-          />
-          <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-            <Pressable
-              onPress={() => setDoctorDiagnosisBool(!doctorDiagnosisBool)}
-            >
-              {
-                doctorDiagnosisBool
-                  ?
-                  <Ionicons name='checkmark-circle' size={24} color={PRIMARY}/>
-                  :
-                  <View style={styles.emptyCircle}/>
-              }
-            </Pressable>
-            <Text style={[styles.subText, {marginLeft: doctorDiagnosisBool ? 12 : 11}]}>Diagnosed by a doctor?</Text>
+            <TextInput
+              style={[styles.input, {width: WIDTH - PADDING * 4}]}
+              onChangeText={setOtherDiagnosis}
+              editable={isOther(diagnosis)}
+              placeholder={isOther(diagnosis) ? 'Describe the diagnosis' : ''}
+              placeholderTextColor={isOther(diagnosis) ? PRIMARY_LIGHT : PRIMARY_VERY_LIGHT}
+              autoCapitalize={'sentences'}
+              value={otherDiagnosis}
+            />
+            <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              <Pressable
+                onPress={() => setDoctorDiagnosisBool(!doctorDiagnosisBool)}
+              >
+                {
+                  doctorDiagnosisBool
+                    ?
+                    <Ionicons name='checkmark-circle' size={24} color={PRIMARY}/>
+                    :
+                    <View style={styles.emptyCircle}/>
+                }
+              </Pressable>
+              <Text style={[styles.subText, {marginLeft: doctorDiagnosisBool ? 12 : 11}]}>Diagnosed by a doctor?</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <Pressable
+                onPress={() => navigation.goBack()}
+                style={[styles.buttonEmpty, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextEmpty}>Cancel</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setCurrentScreen(currentScreen + 1)}
+                style={[styles.buttonFilled, styles.halfButton]}
+              >
+                <Text style={styles.buttonTextFilled}>Review</Text>
+              </Pressable>
+            </View>
+
+            {activityDots()}
+
           </View>
-          <View style={{flexDirection: 'row'}}>
-            <Pressable
-              onPress={() => navigation.goBack()}
-              style={[styles.buttonEmpty, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextEmpty}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setCurrentScreen(currentScreen + 1)}
-              style={[styles.buttonFilled, styles.halfButton]}
-            >
-              <Text style={styles.buttonTextFilled}>Review</Text>
-            </Pressable>
-          </View>
-
-          {activityDots()}
-
         </View>
       </View>
     )
     // Finally confirm and add day
   } else {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: BACKGROUND_LIGHT}}>
         <View style={[styles.calendar, {flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND, paddingTop: PADDING}]}>
           <Text style={[styles.questionText, {paddingTop: 20}]}>{new Date(date).toDateString()}</Text>
           <SickdayView editable={false} sickday={new SickDay(null, date, parseFloat(temperature + '.' + tempDecimal) , doctorDiagnosisBool, isOther(diagnosis), selectedSymptoms, diagnosis, otherDiagnosis)}/>

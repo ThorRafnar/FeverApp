@@ -3,7 +3,7 @@ import styles from "../views/styles";
 import {Ionicons} from "@expo/vector-icons";
 import React, {useEffect, useState} from "react";
 import {Child, Diagnosis, SickDayInput, Symptom} from "../interfaces";
-import {BACKGROUND, MARGINS, PADDING, PRIMARY_DARK, WIDTH} from "../constants/Theme";
+import {BACKGROUND, MARGINS, PADDING, PRIMARY, PRIMARY_DARK, TEXT, WIDTH} from "../constants/Theme";
 import {Picker} from "@react-native-picker/picker";
 import {EditSickDay, GetDiagnosis, GetSymptoms} from "../requests/Requests";
 import Toast from "react-native-toast-message";
@@ -65,14 +65,15 @@ export function SickdayView(props) {
   }
 
   const symptomsPickerList = () => {
-    console.log(symptomList)
     return (
       <View
         style={{flex: 1}}
       >
         {
           symptomList.map(s => {
-            if (!symptoms.includes(s)) {
+            if (!symptoms.find(x => {
+              return x.public_identifier === s.public_identifier;
+            })) {
               return (
                 <Pressable
                   style={[styles.button, styles.buttonFilled]}
@@ -107,22 +108,22 @@ export function SickdayView(props) {
               setEdited(editable);
               setTemperature(itemValue)
             }}>
-            <Picker.Item label='30' value={30} />
-            <Picker.Item label='31' value={31} />
-            <Picker.Item label='32' value={32} />
-            <Picker.Item label='33' value={33} />
-            <Picker.Item label='34' value={34} />
-            <Picker.Item label='35' value={35} />
-            <Picker.Item label='36' value={36} />
-            <Picker.Item label='37' value={37} />
-            <Picker.Item label='38' value={38} />
-            <Picker.Item label='39' value={39} />
-            <Picker.Item label='40' value={40} />
-            <Picker.Item label='41' value={41} />
-            <Picker.Item label='42' value={42} />
-            <Picker.Item label='43' value={43} />
-            <Picker.Item label='44' value={44} />
-            <Picker.Item label='45' value={45} />
+            <Picker.Item color={TEXT} label='30' value={30} />
+            <Picker.Item color={TEXT} label='31' value={31} />
+            <Picker.Item color={TEXT} label='32' value={32} />
+            <Picker.Item color={TEXT} label='33' value={33} />
+            <Picker.Item color={TEXT} label='34' value={34} />
+            <Picker.Item color={TEXT} label='35' value={35} />
+            <Picker.Item color={TEXT} label='36' value={36} />
+            <Picker.Item color={TEXT} label='37' value={37} />
+            <Picker.Item color={TEXT} label='38' value={38} />
+            <Picker.Item color={TEXT} label='39' value={39} />
+            <Picker.Item color={TEXT} label='40' value={40} />
+            <Picker.Item color={TEXT} label='41' value={41} />
+            <Picker.Item color={TEXT} label='42' value={42} />
+            <Picker.Item color={TEXT} label='43' value={43} />
+            <Picker.Item color={TEXT} label='44' value={44} />
+            <Picker.Item color={TEXT} label='45' value={45} />
           </Picker>
           <Text style={styles.questionText}>,</Text>
         <Picker
@@ -132,16 +133,16 @@ export function SickdayView(props) {
         setEdited(editable);
         setTempDecimal(itemValue)
       }}>
-        <Picker.Item label='0' value={0} />
-        <Picker.Item label='1' value={1} />
-        <Picker.Item label='2' value={2} />
-        <Picker.Item label='3' value={3} />
-        <Picker.Item label='4' value={4} />
-        <Picker.Item label='5' value={5} />
-        <Picker.Item label='6' value={6} />
-        <Picker.Item label='7' value={7} />
-        <Picker.Item label='8' value={8} />
-        <Picker.Item label='9' value={9} />
+        <Picker.Item color={TEXT} label='0' value={0} />
+        <Picker.Item color={TEXT} label='1' value={1} />
+        <Picker.Item color={TEXT} label='2' value={2} />
+        <Picker.Item color={TEXT} label='3' value={3} />
+        <Picker.Item color={TEXT} label='4' value={4} />
+        <Picker.Item color={TEXT} label='5' value={5} />
+        <Picker.Item color={TEXT} label='6' value={6} />
+        <Picker.Item color={TEXT} label='7' value={7} />
+        <Picker.Item color={TEXT} label='8' value={8} />
+        <Picker.Item color={TEXT} label='9' value={9} />
         </Picker>
         <Text style={styles.questionText}>°C</Text>
       </View>
@@ -157,7 +158,7 @@ export function SickdayView(props) {
 
 
       <View style={{flex: 0.1}}/>
-      <View style={{flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: MARGINS}}>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: MARGINS, alignItems: 'center', justifyContent: 'center'}}>
         {symptoms.map((symptom: Symptom, index: number) => {
           return (
             <View style={styles.tag} key={symptom.public_identifier}>
@@ -183,15 +184,17 @@ export function SickdayView(props) {
             </View>
           )
         })}
-      </View>
-      <View style={{flex: 0.1}}/>
 
+      </View>
       <Pressable
-        style={[styles.button, styles.buttonEmpty]}
+        style={{alignItems: 'center', justifyContent: 'center', height: 44, width: 44}}
         onPress={() => setEditingSymptoms(!editingSymptoms && editable)}
       >
-        <Text style={styles.buttonTextEmpty}>Symptoms</Text>
+        <Ionicons name='add-circle-outline' size={38} color={PRIMARY_DARK} style={{flex: 1}} />
       </Pressable>
+      <View style={{flex: 0.1}}/>
+
+
       <Modal
         isVisible={editingSymptoms}
         onBackdropPress={() => setEditingSymptoms(!editingSymptoms)}
@@ -224,7 +227,7 @@ export function SickdayView(props) {
             setEdited(editable);
           }}
         >
-          <Ionicons name={doctorDiagnosisBool ? 'checkmark-circle' : 'checkmark-circle-outline'} size={22}/>
+          <Ionicons name={doctorDiagnosisBool ? 'checkmark-circle' : 'checkmark-circle-outline'} size={22} color={PRIMARY}/>
         </Pressable>
         <Text style={styles.subText}>{doctorDiagnosisBool ? '       Diagnosed by a doctor' : 'Not diagnosed by a doctor'}</Text>
       </View>

@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import {useEffect, useState, useMemo, useReducer} from "react";
 import {ActivityIndicator, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,7 +12,17 @@ import LoginScreen from "./src/views/LoginScreen";
 import InfoScreen from "./src/views/InfoScreen";
 import SignupScreen from './src/views/Signup';
 import HomeScreen from './src/views/Home';
-import {BACKGROUND, BASE_URL, MARGINS, PRIMARY, PRIMARY_DARK, PRIMARY_LIGHT, SECONDARY, TOAST_OFFSET} from "./src/constants/Theme";
+import {
+  BACKGROUND,
+  BASE_URL,
+  MARGINS,
+  PRIMARY,
+  PRIMARY_DARK,
+  PRIMARY_LIGHT,
+  SECONDARY,
+  TEXT,
+  TOAST_OFFSET
+} from "./src/constants/Theme";
 import {AuthContext} from './src/components/Context';
 import * as SecureStore from 'expo-secure-store';
 import {LogInRequest, SignUpRequest} from "./src/requests/Requests";
@@ -25,9 +37,28 @@ import {EditDay} from "./src/views/EditDay";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: true
+  }),
+});
+
+
 function Home() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: BACKGROUND,
+        },
+        headerTintColor: PRIMARY_DARK,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
       <Stack.Screen name='Home' component={HomeScreen}/>
       <Stack.Screen name='Log Day' component={LogDay}/>
       <Stack.Screen name='Create Child' component={CreateChild} />

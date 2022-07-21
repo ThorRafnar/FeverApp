@@ -3,7 +3,10 @@ import {View, Text, Pressable, SafeAreaView, TextInput, ScrollView} from 'react-
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import styles from './styles';
 import Modal from 'react-native-modal';
-import {BACKGROUND, HEIGHT, MARGINS, PRIMARY, RED, SECONDARY, SECONDARY_LIGHT, WIDTH} from "../constants/Theme";
+import {
+  BACKGROUND, BACKGROUND_LIGHT, FEVER, HEIGHT, MARGINS, NEUTRAL, PRIMARY, PRIMARY_DARK,
+  PRIMARY_LIGHT, PRIMARY_VERY_LIGHT, RED, SECONDARY, SECONDARY_LIGHT, SYMPTOM, TEXT, WIDTH
+} from "../constants/Theme";
 import {Calendar, CalendarList} from 'react-native-calendars';
 import {Picker} from '@react-native-picker/picker';
 import CookieManager from '@react-native-cookies/cookies';
@@ -33,7 +36,8 @@ function HomeScreen({navigation}) {
   const [reloads, setReloads] = useState<number>(0);
 
 
-  const fever_dot = {startingDay: true, endingDay: true, color: PRIMARY}
+  const fever_dot = {startingDay: false, endingDay: false, color: FEVER}
+  const symptom_dot = {startingDay: false, endingDay: false, color: SYMPTOM}
   const selected = {selected: true, selectedColor: SECONDARY_LIGHT};
   const notSelected = {selected: false, selectedColor: null};
 
@@ -63,11 +67,21 @@ function HomeScreen({navigation}) {
         setDateList(d);
         let m:any = {};
         d.map((day, index) => {
-          let dayStyle;
+          let dayStyle:any = {periods: []};
+          let nextDate = new Date(day.date.toISOString());
+          nextDate.setDate(day.date.getDate() + 1);
+          let nextSickDay: SickDay|undefined = d.find(x => {
+            return toShortString(x.date) === toShortString(nextDate);
+          })
+
           if (day.temperature > 37.9) {
-            dayStyle = {periods: [fever_dot]}
+            dayStyle.periods.push(fever_dot);
+
           } else {
-            dayStyle = {periods: []}
+            dayStyle.periods.push({color: BACKGROUND});
+          }
+          if (day.symptoms.length > 0) {
+            dayStyle.periods.push(symptom_dot);
           }
           m[toShortString(day.date)] = dayStyle;
         })
@@ -112,15 +126,33 @@ function HomeScreen({navigation}) {
   // @ts-ignore
   // @ts-ignore
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View style={{flex: 1}}/>
-
-
-
-
-
+    <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: BACKGROUND_LIGHT }}>
+      <View style={{flex: 1, backgroundColor: BACKGROUND}}/>
       <View style={styles.calendarContainer}>
         <Calendar
+          theme={{
+            backgroundColor: BACKGROUND,
+            calendarBackground: BACKGROUND,
+            textSectionTitleColor: PRIMARY_DARK,
+            textSectionTitleDisabledColor: PRIMARY,
+            selectedDayBackgroundColor: SECONDARY,
+            selectedDayTextColor: TEXT,
+            todayTextColor: PRIMARY_DARK,
+            dayTextColor: TEXT,
+            textDisabledColor: 'grey',
+            dotColor: PRIMARY,
+            selectedDotColor: BACKGROUND,
+            arrowColor: PRIMARY_LIGHT,
+            disabledArrowColor: PRIMARY_VERY_LIGHT,
+            monthTextColor: PRIMARY,
+            indicatorColor: PRIMARY,
+            textDayFontWeight: '300',
+            textMonthFontWeight: '500',
+            textDayHeaderFontWeight: '300',
+            textDayFontSize: 16,
+            textMonthFontSize: 22,
+            textDayHeaderFontSize: 16
+          }}
           initialDate={toShortString(date)}
           maxDate={toShortString(new Date())}
           // Handler which gets executed on day press. Default = undefined

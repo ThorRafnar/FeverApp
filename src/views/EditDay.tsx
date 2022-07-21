@@ -1,7 +1,7 @@
 import {Pressable, Text, View} from "react-native";
 import styles from "./styles";
 import {SickdayView} from "../components/sickdayView";
-import {MARGINS, RED} from "../constants/Theme";
+import {BACKGROUND, MARGINS, NEUTRAL, RED} from "../constants/Theme";
 import {DeleteSickDay} from "../requests/Requests";
 import Toast from "react-native-toast-message";
 import Modal from "react-native-modal";
@@ -13,7 +13,7 @@ export const EditDay = ({navigation, route}) => {
 
   const {date, sickday, makeReload} = route.params;
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: BACKGROUND}}>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
         <Text style={[styles.questionText, {paddingTop: 20}]}>{date.toDateString()}</Text>
         <View style={{flex: 0.2}}/>
